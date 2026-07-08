@@ -2,7 +2,8 @@
 import sys
 import requests
 
-from data_errors import InvalidNameError, InvalidResponseRecieved, NotFoundError
+from cache.cache import Cache
+from utils.data_errors import InvalidNameError, InvalidResponseRecieved, NotFoundError
 
 
 def get_poke_data(pokemon_name: str) -> dict:
@@ -24,6 +25,12 @@ def get_poke_data(pokemon_name: str) -> dict:
     if not safe_pkmon_name:
         raise InvalidNameError(pokemon_name)
 
+    cache = Cache()
+    cache_data = cache.search_pokemon(safe_pkmon_name)
+
+    if cache_data:
+        return cache_data
+
     response = requests.get(
         f'https://pokeapi.co/api/v2/pokemon/{safe_pkmon_name}', timeout=10)
 
@@ -43,6 +50,11 @@ def get_poke_data(pokemon_name: str) -> dict:
         raise InvalidResponseRecieved(pokemon_name) from e
     except KeyError as e:
         raise InvalidResponseRecieved(pokemon_name) from e
+
+    for _ in range(1, 4):
+        success = cache.cache_pokemon(data)
+        if success:
+            break
 
     return data
 
