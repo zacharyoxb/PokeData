@@ -13,7 +13,7 @@ def get_poke_data(pokemon_name: str) -> dict:
         pokemon_name (str): Name of Pokemon.
 
     Raises:
-        PokemonInvalidNameError: Error thrown when input is empty or only made of 
+        PokemonInvalidNameError: Error thrown when input is empty or only made of
             invalid characters.
         PokemonNotFoundError: Error thrown when Pokemon was not found in database.
 
@@ -59,12 +59,21 @@ def get_poke_data(pokemon_name: str) -> dict:
     return data
 
 
+def format_pokemon_output(data):
+    """ Displays pokemon in table format. """
+    print(f"\n{'ID':<5} {'Name':<15} {'Height':<10} {'Weight':<10}")
+    print("-" * 40)
+    print(
+        f"{data['id']:<5} {data['name'].title():<15} {data['height']:<10} {data['weight']:<10}\n"
+    )
+
+
 def main():
     """ Main function."""
     user_input = " ".join(sys.argv[1:])
     data = get_poke_data(user_input)
 
-    print(data)
+    format_pokemon_output(data)
 
 
 if __name__ == "__main__":
