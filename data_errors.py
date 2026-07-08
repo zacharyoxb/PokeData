@@ -8,9 +8,11 @@ class PokemonRequestError(Exception):
 class InvalidNameError(PokemonRequestError):
     """ Raised when an invalid pokemon name is provided. """
 
-    def __init__(self, pokemon_name, message="Invalid pokemon name provided"):
+    def __init__(self, pokemon_name, message="Invalid pokemon name provided. "
+                 "Have you remembered to include the pokemon name as an argument when running "
+                 "the program?"):
         self.name = pokemon_name
-        self.message = f"{message}: '{pokemon_name}'"
+        self.message = f"{message}"
         super().__init__(self.message)
 
 
